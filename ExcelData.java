@@ -2,6 +2,7 @@ package TypeRacer;
 
 import java.io.*;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -16,8 +17,20 @@ public class ExcelData
     @SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException
     {
+    	//Checks time
+    	long startTime = System.currentTimeMillis();
     	
-    	dataTracker.createData();
+    	
+    	//Makes textfile of TypeRacer data
+    	System.out.println("\fWhich account should I check?");
+    	Scanner in = new Scanner(System.in);
+		String username = in.nextLine();
+		
+	
+		
+    	dataTracker.createData(username);
+    	
+    	System.out.println("Now making the excel file!");
         //Blank workbook
         XSSFWorkbook workbook = new XSSFWorkbook();
          
@@ -28,7 +41,8 @@ public class ExcelData
         Map<String, Object[]> data = new TreeMap<String, Object[]>();
         data.put("1", new Object[] {"WPM", "Accuracy", "Number of Words", "Average Word Length"});
         
-        BufferedReader f = new BufferedReader(new FileReader("yoonData.txt"));
+    	String textFile = username + "DATAFILE.txt";
+        BufferedReader f = new BufferedReader(new FileReader(textFile));
        
         int i = 2;
         for(String s = f.readLine(); s!=null; s = f.readLine()) {
@@ -62,10 +76,13 @@ public class ExcelData
         try
         {
             //Write the workbook in file system
-            FileOutputStream out = new FileOutputStream(new File("yoonData.xlsx"));
+        	String xlsxFile = username + "DATAFILE.xlsx";
+            FileOutputStream out = new FileOutputStream(new File(xlsxFile));
             workbook.write(out);
             out.close();
-            System.out.println("yoonData.xlsx written successfully on disk.");
+            long endTime = System.currentTimeMillis();
+            System.out.println(xlsxFile + " written successfully on disk.");
+            System.out.println("This took " + (endTime-startTime)/1000 + " seconds");
         }
         catch (Exception e)
         {

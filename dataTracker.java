@@ -3,6 +3,7 @@ package TypeRacer;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 import org.apache.commons.logging.LogFactory;
@@ -14,17 +15,24 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class dataTracker {
 	
+	@SuppressWarnings("resource")
 	public static void main(String [] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		createData();
+		System.out.println("\fWhich account should I check?");
+		Scanner in = new Scanner(System.in);
+		String username = in.nextLine();
+		
+		createData(username);
 	}
 	
 	@SuppressWarnings("resource")
-	public static void createData() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
+	public static void createData(String username) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		  java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
 		
 		WebClient webClient = new WebClient(BrowserVersion.CHROME);
 		
-		HtmlPage page = webClient.getPage("https://data.typeracer.com/pit/race_history?user=yoontestdata&n=100&startDate=");
+		String raceHistoryUrl = "https://data.typeracer.com/pit/race_history?user=" + username + "&n=100&startDate";
+		
+		HtmlPage page = webClient.getPage(raceHistoryUrl);
 		
 		webClient.getOptions().setJavaScriptEnabled(true);
 		
@@ -84,11 +92,11 @@ public class dataTracker {
 			}
 		}
 		
-		double[][] textData = numWords(raceNum);
+		double[][] textData = numWords(raceNum, username);
 		
 		
-		
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("yoonData.txt")));
+		String textFile = username + "DATAFILE.txt";
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(textFile)));
 		//out.println("Race\tWPM\tAccuracy\t#ofWords\tAVG Word Length");
 		for(int i = 0; i< raceNum.size(); i++) {
 			out.println(raceNum.get(i) + " " + wPM.get(i) + " " + accuracy.get(i) + " " + textData[i][0] + " " + textData[i][1]);
@@ -115,16 +123,16 @@ public class dataTracker {
 		return text;
 	}
 	
-	public static double[][] numWords(ArrayList<Integer> race) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
+	public static double[][] numWords(ArrayList<Integer> race, String user) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		double[][] numWords = new double[race.size()][2];
 		String punctuations = ".,:; ";
 		
 		System.out.println("Now creating data file");
 		
 		for(int i =0; i<race.size(); i++) {
-			String url = "https://data.typeracer.com/pit/result?id=|tr:yoontestdata|" + race.get(i);
+			String url = "https://data.typeracer.com/pit/result?id=|tr:" +  user +  "|" + race.get(i);
 			String text = getText(url);
-			System.out.println((race.size() - i) + " seconds left...");
+			System.out.println((race.size() - i) + " pages left to check...");
 			
 			int numWordsLength = text.split(" ").length;
 			
