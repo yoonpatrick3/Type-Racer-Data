@@ -22,7 +22,7 @@ public class ExcelData
     	
     	
     	//Makes textfile of TypeRacer data
-    	System.out.println("\fWhich account should I check?");
+    	System.out.println("Which account should I check?");
     	Scanner in = new Scanner(System.in);
 		String username = in.nextLine();
 		
@@ -39,7 +39,7 @@ public class ExcelData
           
         //This data needs to be written (Object[])
         Map<String, Object[]> data = new TreeMap<String, Object[]>();
-        data.put("1", new Object[] {"WPM", "Accuracy", "Number of Words", "Average Word Length"});
+        data.put("1", new Object[] {"WPM", "Accuracy", "Number of Words", "Average Word Length", "Number of Punctuations"});
         
     	String textFile = username + "DATAFILE.txt";
         BufferedReader f = new BufferedReader(new FileReader(textFile));
@@ -50,7 +50,7 @@ public class ExcelData
         	
         	
         	
-        	data.put(Integer.toString(i), new Object[] {arr[1], arr[2], arr[3],arr[4]});
+        	data.put(Integer.toString(i), new Object[] {arr[1], arr[2], arr[3],arr[4], arr[5]});
       
         	i++;
         }
@@ -82,7 +82,10 @@ public class ExcelData
             out.close();
             long endTime = System.currentTimeMillis();
             System.out.println(xlsxFile + " written successfully on disk.");
-            System.out.println("This took " + (endTime-startTime)/1000 + " seconds");
+            
+            long totalTime = (endTime-startTime)/1000;
+            
+            System.out.println("This took " + totalTime/60 + " minutes and " + totalTime%60 + " seconds");
         }
         catch (Exception e)
         {
