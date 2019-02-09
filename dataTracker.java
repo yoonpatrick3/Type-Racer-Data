@@ -122,7 +122,7 @@ public class dataTracker {
 	
 	public static double[][] numWords(ArrayList<Integer> race, String user) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		double[][] numWords = new double[race.size()][3];
-		String punctuations = "!?.,:;'-\"";
+		String symbols = "()@#$%^&!*+=/\\~<>{}[]|?.,:;'-\"";
 		
 	//	String numbers = "1234567890";
 		
@@ -137,16 +137,16 @@ public class dataTracker {
 			
 			String[] allChars = text.split("");
 			
-			double puncCounter = 0;
+			double symbCounter = 0;
 			double charCounter = 0;
 		//	double numCounter = 0;
 			
 			for(int j = 0; j<allChars.length; j++) {
-				if(!punctuations.contains(allChars[j]) && !allChars[j].equals(" ")) {
+				if(!symbols.contains(allChars[j]) && !allChars[j].equals(" ")) {
 					charCounter++;
 				}
-				else if(punctuations.contains(allChars[j])) {
-					puncCounter++;
+				else if(symbols.contains(allChars[j])) {
+					symbCounter++;
 				}
 				/*else if(numbers.contains(allChars[j])){
 					numCounter++;
@@ -155,7 +155,7 @@ public class dataTracker {
 			
 			numWords[i][0] = numWordsLength;
 			numWords[i][1] = charCounter/numWordsLength;
-			numWords[i][2] = puncCounter;
+			numWords[i][2] = symbCounter;
 		//	numWords[i][3] = numCounter;
 			
 		}

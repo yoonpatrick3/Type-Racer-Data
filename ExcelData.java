@@ -39,7 +39,7 @@ public class ExcelData
           
         //This data needs to be written (Object[])
         Map<String, Object[]> data = new TreeMap<String, Object[]>();
-        data.put("1", new Object[] {"WPM", "Accuracy", "Number of Words", "Average Word Length", "Number of Punctuations"});
+        data.put("1", new Object[] {"WPM", "Accuracy", "Number of Words", "Average Word Length", "Number of Symbols"});
         
     	String textFile = username + "DATAFILE.txt";
         BufferedReader f = new BufferedReader(new FileReader(textFile));
